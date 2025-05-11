@@ -195,6 +195,9 @@ nav{
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
+    /* background-color: #14fc69; */
+    max-height: 70%;
+    overflow-y: scroll;
 }
 
 .song-card {
