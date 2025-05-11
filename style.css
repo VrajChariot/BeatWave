@@ -438,6 +438,14 @@ nav{
     .signup{
         font-size: 14px;
     }
+    .seekbar_wrapper {
+        position: fixed;
+        bottom: 5px;
+        width: 97%;
+        z-index: 10;
+        left: 50%;
+        transform: translate(-50%);
+    }
     .song_details{
         flex-direction: column;
         align-items: center;
