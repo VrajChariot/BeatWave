@@ -15,7 +15,7 @@ body {
     padding: 0; /* Add this */
     align-items: flex-start; /* Add this */
     position: relative;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 
 aside, main {
