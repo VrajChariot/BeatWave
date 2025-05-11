@@ -1,42 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>BeatWave</title>
-    <style>
-        .songs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        .song-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .song-card:hover {
-            transform: scale(1.02);
-        }
-        .play-button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .play-button:hover {
-            background: #45a049;
-        }
-    </style>
 </head>
+
 <body>
-    <h1>BeatWave</h1>
-    <div id="songs-container" class="songs-grid"></div>
+    <aside>
+        <!-- left side library goes in here -->
+        <header>
+            <div class="logo_wrapper">
+                <img src="./images/logo.svg" alt="">
+                <h1>BeatWave</h1>
+            </div>
+            <ul>
+                <li><img src="./images/home.svg" alt="Home">Home</li>
+                <li><img src="./images/search.svg" alt="Search">Search</li>
+            </ul>
+        </header>
+        <div class="library">
+            <div class="heading">
+                <img src="./images/playlist.svg" alt="">
+                <h2>Library</h2>
+            </div>
+            <div class="songlist">
+                <!-- <div class="song_info">
+                    <div class="song_wrapper">
+                        <img src="./images/music.svg" alt="">
+                        <div>
+                            <p>Song Name</p>
+                            <p>Artist Name</p>
+                        </div>
+                    </div>
+                    <div class="play_wrapper">
+                        <p>Play Now</p>
+                        <img src="./images/play_now.svg" alt="">
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </aside>
+    <main>
+        <nav>
+            <div class="buttons">
+                <img src="./images/left.svg" alt="">
+                <img src="./images/right.svg" alt="">
+            </div>
+            <div class="login_buttons">
+                <button class="signup">Sign Up</button>
+                <button class="login">Login</button>
+            </div>
+        </nav>
+        <!-- right side main songs section goes in here  -->
+         <h1>Your Songs</h1>
+        <div id="songs-container" class="songs-grid">
+            <!-- <div class="song-card">
+                <img src="./songs/Replay/Replay.jpeg" class="cover-image">
+                <h3>Replay</h3>
+                <p>Artist: Me hoon</p>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi tempore modi culpa assumenda fugit
+                    libero dicta recusandae</p>
+                <button class="play-button">Play</button>
+            </div> -->
+        </div>
+    </main>
+
     <script src="./script.js"></script>
 </body>
+
 </html>
