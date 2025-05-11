@@ -10,10 +10,12 @@ body {
     display: flex;
     background-color: #000000;
     font-family: 'Poppins';
-    max-height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     padding: 0; /* Add this */
     align-items: flex-start; /* Add this */
     position: relative;
+    overflow: hidden;
 }
 
 aside, main {
@@ -199,6 +201,7 @@ nav{
     border-radius: 40px;
     padding: 13px 20px;
     border: none;
+    color: black;
     cursor: pointer;
 }
 
@@ -391,6 +394,9 @@ nav{
 
 
 @media (max-width: 430px) {
+    body {
+        height: -webkit-fill-available; /* Add this for iOS */
+    }
 
     nav{
         padding: 10px;
@@ -453,6 +459,7 @@ nav{
     }
     .songs-grid{
         padding-bottom: 100px;
+        -webkit-overflow-scrolling: touch;
     }
     .play_wrapper>p{
         display: none;
