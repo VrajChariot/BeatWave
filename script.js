@@ -1,18 +1,38 @@
+let currentSongIndex = 0;
+let songsList = [];
+let isPlaying = false;
+let currentAudio = null;
+let initialSongInfo = null; // Add this global variable
+
 async function fetchSongsList() {
     try {
-        const response = await fetch('https://api.github.com/repos/vrajchariot/BeatWave/contents/songs');
+        // Add a personal access token to increase rate limit
+        const response = await fetch('https://api.github.com/repos/vrajchariot/BeatWave/contents/songs', {
+            headers: {
+                'Authorization': 'Bearer ***REMOVED***'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`GitHub API error: ${response.status}`);
+        }
+        
         const data = await response.json();
-        console.log(data);
-        // this will filter the data to get only the directories (songs) and map them to their names
+        console.log('API Response:', data);
+        
+        if (!Array.isArray(data)) {
+            throw new Error('Expected array from GitHub API');
+        }
+        
         let filter_songs = data.filter(item => item.type === 'dir').map(dir => dir.name);
-        console.log(filter_songs);
+        console.log('Filtered songs:', filter_songs);
         return filter_songs;
     } catch (error) {
         console.error('Error fetching songs list:', error);
-        return [];
+        // Fallback to local song list if API fails
+        return ['blinding lights', 'Perfect', 'Replay', 'Right Round', 'Stay'];
     }
 }
-
 
 async function fetchSongInfo(songName) {
     try {
@@ -27,11 +47,118 @@ async function fetchSongInfo(songName) {
     }
 }
 
-let currentAudio = null;
+// Add this function to update seekbar details
+function updateSeekbarInfo(songInfo, audio) {
+    const seekBarSongName = document.querySelector('.seekBar_songName');
+    const seekBarArtistName = document.querySelector('.seekBar_artistName');
+    const timeStamp = document.querySelector('.timeStamp span');
+    const pauseControl = document.querySelector('.pause_control');
+    const seekbarFill = document.querySelector('.seekbar_fill');
 
+    seekBarSongName.textContent = songInfo.title;
+    seekBarArtistName.textContent = songInfo.artist;
+    
+    // Update play/pause button
+    pauseControl.src = isPlaying ? './images/pause.svg' : './images/play_now.svg';
+
+    // Update timestamp and seekbar
+    audio.addEventListener('timeupdate', () => {
+        const currentTime = formatTime(audio.currentTime);
+        const duration = formatTime(audio.duration);
+        timeStamp.textContent = `${currentTime} / ${duration}`;
+        
+        const progress = (audio.currentTime / audio.duration) * 100;
+        seekbarFill.style.width = `${progress}%`;
+    });
+}
+
+// Time formatter function
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
+// Modify the play function to handle all audio controls
+async function playSong(index) {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+
+    const songInfo = await fetchSongInfo(songsList[index]);
+    const audio = new Audio(`songs/${songInfo.folder}/${songInfo.audio}`);
+    
+    audio.play();
+    currentAudio = audio;
+    currentSongIndex = index;
+    isPlaying = true;
+    
+    updateSeekbarInfo(songInfo, audio);
+    console.log(`Playing ${songInfo.title} by ${songInfo.artist}`);
+}
+
+// Add event listeners for control buttons
+function setupControls() {
+    const previousButton = document.querySelector('.previous_control');
+    const nextButton = document.querySelector('.next_control');
+    const pauseButton = document.querySelector('.pause_control');
+    const seekbar = document.querySelector('.seekbar');
+
+    previousButton.addEventListener('click', () => {
+        if (currentSongIndex > 0) {
+            playSong(currentSongIndex - 1);
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        if (currentSongIndex < songsList.length - 1) {
+            playSong(currentSongIndex + 1);
+        }
+    });
+
+    pauseButton.addEventListener('click', () => {
+        if (!currentAudio && initialSongInfo) {
+            // First time play
+            playSong(0);
+        } else if (currentAudio) {
+            if (isPlaying) {
+                currentAudio.pause();
+                pauseButton.src = './images/play_now.svg';
+            } else {
+                currentAudio.play();
+                pauseButton.src = './images/pause.svg';
+            }
+            isPlaying = !isPlaying;
+        }
+    });
+
+    seekbar.addEventListener('click', (e) => {
+        if (currentAudio) {
+            const seekbarWidth = seekbar.offsetWidth;
+            const clickPosition = e.offsetX;
+            const seekTime = (clickPosition / seekbarWidth) * currentAudio.duration;
+            currentAudio.currentTime = seekTime;
+        }
+    });
+}
+
+// Modify displaySongs function to show first song in seekbar
 async function displaySongs() {
     const container = document.getElementById('songs-container');
-    const songsList = await fetchSongsList();
+    songsList = await fetchSongsList();
+    setupControls();
+
+    // Load first song details into seekbar
+    if (songsList.length > 0) {
+        initialSongInfo = await fetchSongInfo(songsList[0]);
+        if (initialSongInfo) {
+            const seekBarSongName = document.querySelector('.seekBar_songName');
+            const seekBarArtistName = document.querySelector('.seekBar_artistName');
+            seekBarSongName.textContent = initialSongInfo.title;
+            seekBarArtistName.textContent = initialSongInfo.artist;
+        }
+    }
 
     for (const songName of songsList) {
         const songInfo = await fetchSongInfo(songName);
@@ -52,17 +179,11 @@ async function displaySongs() {
                     </div>
             `;
             songlistinfo.addEventListener('click', () => {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio = null;
-                }
-
-                const audio = new Audio(`songs/${songInfo.folder}/${songInfo.audio}`);
-                audio.play();
-                currentAudio = audio;
-                console.log(`Playing ${songInfo.title} by ${songInfo.artist}`);
+                const index = songsList.indexOf(songName);
+                playSong(index);
             });
             document.querySelector('.songlist').appendChild(songlistinfo);
+
             const songCard = document.createElement('div');
             songCard.className = 'song-card';
             songCard.innerHTML = `
@@ -72,16 +193,10 @@ async function displaySongs() {
                 <button class="play-button"><img src="./images/play_button.svg" alt="PlayNow"></button>
             `;
             const playButton = songCard.querySelector('.play-button');
-            playButton.addEventListener('click', () => {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio = null;
-                }
-
-                const audio = new Audio(`songs/${songInfo.folder}/${songInfo.audio}`);
-                audio.play();
-                currentAudio = audio;
-                console.log(`Playing ${songInfo.title} by ${songInfo.artist}`);
+            playButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const index = songsList.indexOf(songName);
+                playSong(index);
             });
 
             container.appendChild(songCard);
@@ -90,3 +205,4 @@ async function displaySongs() {
 }
 
 document.addEventListener('DOMContentLoaded', displaySongs);
+

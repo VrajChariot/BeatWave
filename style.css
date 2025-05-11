@@ -132,13 +132,14 @@ header ul li img {
 }
 
 main {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     background-color: #121212;
     border-radius: 10px;
     width: 75vw;
     margin: 5px;
     height: calc(100vh - 10px);
     color: #ffffff;
+    position: relative;
 }
 
 main>h1{
@@ -191,40 +192,60 @@ nav{
 
 .songs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
 }
 
 .song-card {
-    /* border: 1px solid #ddd; */
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
     background-color: #1f1f1f;
-    width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.Artist_info{
-    color: #B3B3B3;
+.song-card:hover {
+    transform: translateY(-5px);
+    background-color: #282828;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    .play-button{
+        opacity: 1;
+        top: 50%;
+    }
 }
 
 .song-card img {
     width: 100%;
     border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-.song-card:hover {
-    transform: scale(1.02);
-    .play-button{
-        top: 47%;
-        opacity: 1;
-    }
+.song-card:hover img {
+    filter: brightness(0.7);
+}
+
+.song-card h3 {
+    transition: color 0.3s ease;
+}
+
+.song-card:hover h3 {
+    color: #1cd760;
+}
+
+.Artist_info {
+    color: #B3B3B3;
+    transition: color 0.3s ease;
+}
+
+.song-card:hover .Artist_info {
+    color: #ffffff;
 }
 
 .play-button {
@@ -240,7 +261,7 @@ nav{
     align-items: center;
     padding: 10px;
     position: absolute;
-    top: 50%;
+    top: 57%;
     left: 68%;
     background: #1cd760;
     transition: all 0.3s;
@@ -249,4 +270,101 @@ nav{
 
 .play-button:hover {
     background: #14fc69;
+}
+
+.seekbar_wrapper {
+    margin: auto;
+    width: 100%;
+    border-radius: 10px;
+    background-color: #1f1f1f;
+    padding: 16px 24px;
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+    /* justify-content: center; */
+    gap: 10px;
+    position: absolute;
+    bottom: 0;
+    /* border-top: 1px solid #282828; */
+}
+
+.song_details {
+    /* min-width: 180px; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+
+.song_details_text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 106px;
+    text-align: left;
+}
+
+.song_details_text h4 {
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+}
+
+.song_details_text p {
+    color: #b3b3b3;
+    font-size: 12px;
+    margin: 0;
+}
+
+.control_buttons{
+    filter: invert();
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.control_buttons img{
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.timeStamp{
+    width: 100px;
+    text-align: center;
+}
+
+.seekbar_container {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    /* max-width: 722px; */
+}
+
+.seekbar {
+    width: 100%;
+    height: 4px;
+    background-color: #4f4f4f;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+}
+
+.seekbar_fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #1cd760;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.2s ease;
+}
+
+.seekbar:hover .seekbar_fill {
+    background-color: #1fdf64;
 }
