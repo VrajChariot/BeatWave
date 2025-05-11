@@ -6,12 +6,8 @@ let initialSongInfo = null; // Add this global variable
 
 async function fetchSongsList() {
     try {
-        // Add a personal access token to increase rate limit
-        const response = await fetch('https://api.github.com/repos/vrajchariot/BeatWave/contents/songs', {
-            headers: {
-                'Authorization': 'Bearer ***REMOVED***'
-            }
-        });
+        // Direct API call without token (using fallback for rate limits)
+        const response = await fetch('https://api.github.com/repos/vrajchariot/BeatWave/contents/songs');
         
         if (!response.ok) {
             throw new Error(`GitHub API error: ${response.status}`);
