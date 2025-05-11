@@ -4,7 +4,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
 
 body {
     display: flex;
@@ -466,13 +465,14 @@ nav{
         height: 30px;
     }
     .play-button{
-        left: 70%;    
+        left: 74%;   
+        top: 65%; 
         width: 60px;
         height: 60px;
     }
     .songs-grid{
         padding-bottom: 120px;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); */
         -webkit-overflow-scrolling: touch;
     }
     .play_wrapper>p{
@@ -481,7 +481,8 @@ nav{
     .song-card:hover {
         .play-button{
             opacity: 1;
-            top: 55%;
+            top: 59%;
+        }
         }
     }
 
