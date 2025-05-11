@@ -202,3 +202,12 @@ async function displaySongs() {
 
 document.addEventListener('DOMContentLoaded', displaySongs);
 
+hamburger = document.querySelector(".hamburger");
+hamburger.addEventListener("click", () => {
+    document.getElementsByTagName("aside")[0].style.left = "0%"
+});
+
+close = document.querySelector(".close");
+close.addEventListener("click", () => {
+    document.getElementsByTagName("aside")[0].style.left = "-100%"
+});
