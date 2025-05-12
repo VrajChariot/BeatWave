@@ -82,8 +82,22 @@ async function playSong(index) {
         currentAudio = null;
     }
 
+    document.querySelectorAll('.song_info').forEach(song => {
+        song.classList.remove('active');
+    });
+
+    // Add active class to currently playing song
+    const songElements = document.querySelectorAll('.song_info');
+    songElements[index].classList.add('active');
+
     const songInfo = await fetchSongInfo(songsList[index]);
     const audio = new Audio(`songs/${songInfo.folder}/${songInfo.audio}`);
+
+    audio.addEventListener('ended', () => {
+        if (currentSongIndex < songsList.length - 1) {
+            playSong(currentSongIndex + 1);
+        }
+    });
     
     audio.play();
     currentAudio = audio;

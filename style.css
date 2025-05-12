@@ -112,18 +112,97 @@ header ul li img {
     height: 60%;
     /* background-color: #45a049; */
     overflow: scroll;
+    padding-top: 3px;
 
 }
-.song_info{
-    border: 1px solid gray;
+.song_info {
+    border: 1px solid #282828;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 0 5px 10px 5px; /* Add margin left/right for hover space */
     cursor: pointer;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
+
+/* Replace translateX with better hover effects */
+.song_info:hover {
+    background-color: #282828;
+    border-color: #1cd760;
+    transform: scale(1.02); /* Scale instead of translate */
+    box-shadow: 0 0 10px rgba(28, 215, 96, 0.2); /* Add subtle glow */
+}
+
+/* Text effects */
+.song_info .song_wrapper div p {
+    transition: color 0.3s ease;
+}
+
+.song_info:hover .song_wrapper div p:first-child {
+    color: #1cd760;
+}
+
+/* Play wrapper effects */
+.song_info .play_wrapper {
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.song_info:hover .play_wrapper {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Image rotation effect */
+.song_info .play_wrapper img {
+    transition: transform 0.3s ease;
+}
+
+.song_info:hover .play_wrapper img {
+    transform: rotate(360deg);
+}
+
+/* Music icon effect */
+.song_info .song_wrapper img {
+    transition: all 0.3s ease;
+}
+
+.song_info:hover .song_wrapper img {
+    filter: invert(73%) sepia(68%) saturate(431%) hue-rotate(93deg) brightness(91%) contrast(87%);
+    transform: scale(1.1);
+}
+
+/* Active song styling - same as hover effect */
+.song_info.active {
+    background-color: #282828;
+    border-color: #1cd760;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(28, 215, 96, 0.2);
+}
+
+.song_info.active .song_wrapper div p:first-child {
+    color: #1cd760;
+}
+
+.song_info.active .play_wrapper {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.song_info.active .play_wrapper img {
+    transform: rotate(360deg);
+}
+
+.song_info.active .song_wrapper img {
+    filter: invert(73%) sepia(68%) saturate(431%) hue-rotate(93deg) brightness(91%) contrast(87%);
+    transform: scale(1.1);
+}
+
 .song_wrapper{
     display: flex;
     align-items: center;
