@@ -85,6 +85,36 @@ header ul li img {
     height: 18px;
     filter: invert();
 }
+
+.searchbox {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: none;
+    border: 1px solid #282828;
+    outline: none;
+    color: white;
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+.searchbox:hover {
+    border-color: #1cd760; /* BeatWave's green color */
+    box-shadow: 0 0 10px rgba(28, 215, 96, 0.2); /* Subtle green glow */
+    background: rgba(28, 215, 96, 0.05); /* Very subtle green tint */
+}
+
+.searchbox:focus, 
+.searchbox:active {
+    border-color: #1cd760;
+    box-shadow: 0 0 15px rgba(28, 215, 96, 0.3); /* Stronger glow when active */
+    background: rgba(28, 215, 96, 0.1); /* Slightly more visible green tint */
+    transform: scale(1.02); /* Subtle scale up effect */
+}
+
+.search_input{
+    display: none;
+}
 .library{
     background-color: #121212;
     display: flex;
@@ -448,6 +478,15 @@ nav{
     position: relative;
     cursor: pointer;
     transition: height 0.2s ease;
+}
+.seekbar {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: none;
 }
 
 .seekbar_fill {

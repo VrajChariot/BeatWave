@@ -3,6 +3,8 @@ let songsList = [];
 let isPlaying = false;
 let currentAudio = null;
 let initialSongInfo = null; // Add this global variable
+let isDragging = false;
+let draggedTime = 0;
 
 async function fetchSongsList() {
     try {
@@ -43,7 +45,7 @@ async function fetchSongInfo(songName) {
     }
 }
 
-// Add this function to update seekbar details
+// Modify updateSeekbarInfo function
 function updateSeekbarInfo(songInfo, audio) {
     const seekBarSongName = document.querySelector('.seekBar_songName');
     const seekBarArtistName = document.querySelector('.seekBar_artistName');
@@ -54,22 +56,31 @@ function updateSeekbarInfo(songInfo, audio) {
     seekBarSongName.textContent = songInfo.title;
     seekBarArtistName.textContent = songInfo.artist;
     
-    // Update play/pause button
-    pauseControl.src = isPlaying ? './images/pause.svg' : './images/play_now.svg';
-
-    // Update timestamp and seekbar
-    audio.addEventListener('timeupdate', () => {
-        const currentTime = formatTime(audio.currentTime);
+    // Add loadedmetadata event listener
+    audio.addEventListener('loadedmetadata', () => {
         const duration = formatTime(audio.duration);
-        timeStamp.textContent = `${currentTime} / ${duration}`;
-        
-        const progress = (audio.currentTime / audio.duration) * 100;
-        seekbarFill.style.width = `${progress}%`;
+        timeStamp.textContent = `0:00 / ${duration}`;
     });
+
+    // Update play/pause button and timestamp
+    audio.addEventListener('timeupdate', () => {
+        if (!isDragging && !isNaN(audio.duration)) {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            seekbarFill.style.width = `${progress}%`;
+            
+            // Update timestamp
+            const currentTime = formatTime(audio.currentTime);
+            const duration = formatTime(audio.duration);
+            timeStamp.textContent = `${currentTime} / ${duration}`;
+        }
+    });
+    
+    pauseControl.src = isPlaying ? './images/pause.svg' : './images/play_now.svg';
 }
 
-// Time formatter function
+// Make sure formatTime handles invalid input
 function formatTime(seconds) {
+    if (!seconds || isNaN(seconds)) return "0:00";
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -151,6 +162,77 @@ function setupControls() {
             currentAudio.currentTime = seekTime;
         }
     });
+
+    // Mouse events
+    seekbar.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        updateSeekPosition(e.offsetX, seekbar.offsetWidth);
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const rect = seekbar.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            updateSeekPosition(offsetX, seekbar.offsetWidth);
+        }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        if (isDragging && currentAudio) {
+            const rect = seekbar.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            isDragging = false;
+            updateSeekPosition(offsetX, seekbar.offsetWidth);
+        }
+    });
+
+    // Touch events
+    seekbar.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const rect = seekbar.getBoundingClientRect();
+        const offsetX = e.touches[0].clientX - rect.left;
+        updateSeekPosition(offsetX, seekbar.offsetWidth);
+    });
+
+    seekbar.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            const rect = seekbar.getBoundingClientRect();
+            const offsetX = e.touches[0].clientX - rect.left;
+            updateSeekPosition(offsetX, seekbar.offsetWidth);
+        }
+    });
+
+    seekbar.addEventListener('touchend', (e) => {
+        isDragging = false;
+        if (currentAudio) {
+            const rect = seekbar.getBoundingClientRect();
+            const offsetX = e.changedTouches[0].clientX - rect.left;
+            updateSeekPosition(offsetX, seekbar.offsetWidth);
+        }
+    });
+
+    // Add this helper function
+    function updateSeekPosition(offsetX, totalWidth) {
+        if (currentAudio) {
+            const percentage = Math.min(Math.max(offsetX / totalWidth, 0), 1);
+            draggedTime = percentage * currentAudio.duration;
+            
+            // Update visual elements only
+            const seekbarFill = document.querySelector('.seekbar_fill');
+            seekbarFill.style.width = `${percentage * 100}%`;
+
+            // Update timestamp display
+            const timeStamp = document.querySelector('.timeStamp span');
+            const currentTime = formatTime(draggedTime);
+            const duration = formatTime(currentAudio.duration);
+            timeStamp.textContent = `${currentTime} / ${duration}`;
+
+            // Only update audio position when drag ends
+            if (!isDragging) {
+                currentAudio.currentTime = draggedTime;
+            }
+        }
+    }
 }
 
 // Modify displaySongs function to show first song in seekbar
@@ -224,4 +306,45 @@ hamburger.addEventListener("click", () => {
 close = document.querySelector(".close");
 close.addEventListener("click", () => {
     document.getElementsByTagName("aside")[0].style.left = "-100%"
+});
+
+const searchButton = document.querySelector(".search_btn");
+const searchInput = document.querySelector(".search_input");
+searchButton.addEventListener("click", () =>{
+    searchButton.style.display = "none";
+    searchInput.style.display = "flex";
+});
+
+const closeSearch = document.querySelector(".closeSearch");
+closeSearch.addEventListener("click", () =>{
+    searchButton.style.display = "flex";
+    searchInput.style.display = "none";
+});
+
+const searchbox = document.querySelector(".searchbox");
+searchbox.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const songElements = document.querySelectorAll('.song_info');
+    
+    songElements.forEach(songElement => {
+        const title = songElement.querySelector('.song_wrapper p').textContent.toLowerCase();
+        const artist = songElement.querySelector('.song_wrapper p:last-child').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || artist.includes(searchTerm)) {
+            songElement.style.display = 'flex';
+        } else {
+            songElement.style.display = 'none';
+        }
+    });
+    const gridSongCards = document.querySelectorAll('.song-card');
+    gridSongCards.forEach(songCard => {
+        const title = songCard.querySelector('h3').textContent.toLowerCase();
+        const artist = songCard.querySelector('.Artist_info').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || artist.includes(searchTerm)) {
+            songCard.style.display = 'Flex';
+        } else {
+            songCard.style.display = 'none';
+        }
+    })
 });
