@@ -315,13 +315,32 @@ searchButton.addEventListener("click", () =>{
     searchInput.style.display = "flex";
 });
 
+const searchbox = document.querySelector(".searchbox");
 const closeSearch = document.querySelector(".closeSearch");
-closeSearch.addEventListener("click", () =>{
+closeSearch.addEventListener("click", (e) => {
+    // Prevent event bubbling
+    e.stopPropagation();
+    
+    // Clear search box value
+    searchbox.value = "";
+    
+    // Reset display states
     searchButton.style.display = "flex";
     searchInput.style.display = "none";
+    
+    // Ensure all songs are visible again
+    const songElements = document.querySelectorAll('.song_info');
+    songElements.forEach(element => {
+        element.style.display = 'flex';
+    });
+    
+    // Reset grid view songs too
+    const gridSongCards = document.querySelectorAll('.song-card');
+    gridSongCards.forEach(card => {
+        card.style.display = 'flex';
+    });
 });
 
-const searchbox = document.querySelector(".searchbox");
 searchbox.addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase();
     const songElements = document.querySelectorAll('.song_info');
@@ -335,6 +354,9 @@ searchbox.addEventListener('input', (e) => {
         } else {
             songElement.style.display = 'none';
         }
+        if (searchTerm === "") {
+            songElement.style.display = 'flex';
+        }
     });
     const gridSongCards = document.querySelectorAll('.song-card');
     gridSongCards.forEach(songCard => {
@@ -345,6 +367,9 @@ searchbox.addEventListener('input', (e) => {
             songCard.style.display = 'Flex';
         } else {
             songCard.style.display = 'none';
+        }
+        if (searchTerm === "") {
+            songCard.style.display = 'flex';
         }
     })
 });
