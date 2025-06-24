@@ -106,7 +106,7 @@ BeatWave is built with a mobile-first approach, ensuring a great experience acro
 
 ### Credits
 * **Developer:** Vraj Shah
-* * **Email:** [Vraj0410shah@gmail.com](mailto:Vraj0410shah@gmail.com)
+* **Email:** [Vraj0410shah@gmail.com](mailto:Vraj0410shah@gmail.com)
 * **Icons:** FontAwesome
 * **Fonts:** Google Fonts - Poppins
 
