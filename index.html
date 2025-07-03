@@ -1,100 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>BeatWave</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <aside>
-        <!-- left side library goes in here -->
-        <header>
-            <div class="logo_wrapper">
-                <div>
-                    <img src="./images/logo.svg" alt="">
-                    <h1>BeatWave</h1>
-                </div>
-                <img src="./images/cross.svg" alt="" class="close">
-            </div>
-            <ul>
-                <li><img src="./images/home.svg" alt="Home">Home</li>
-                <li class="search_btn"><img src="./images/search.svg" alt="Search">Search</li>
-                <li class="search_input"><img src="./images/search.svg" alt=""><input type="text" class="searchbox"><img src="./images/cross.svg" alt="" class="closeSearch"></li>
-            </ul>
-        </header>
-        <div class="library">
-            <div class="heading">
-                <img src="./images/playlist.svg" alt="">
-                <h2>Library</h2>
-            </div>
-            <div class="songlist">
-                <!-- <div class="song_info">
-                    <div class="song_wrapper">
-                        <img src="./images/music.svg" alt="">
-                        <div>
-                            <p>Song Name</p>
-                            <p>Artist Name</p>
-                        </div>
-                    </div>
-                    <div class="play_wrapper">
-                        <p>Play Now</p>
-                        <img src="./images/play_now.svg" alt="">
-                    </div>
-                </div> -->
-            </div>
+      <header>
+        <div class="logo_wrapper">
+          <div>
+            <img src="./images/logo.svg" alt="" />
+            <h1>BeatWave</h1>
+          </div>
+          <img src="./images/cross.svg" alt="" class="close" />
         </div>
+        <ul>
+          <li><img src="./images/home.svg" alt="Home" />Home</li>
+          <li class="search_btn">
+            <img src="./images/search.svg" alt="Search" />Search
+          </li>
+          <li class="search_input">
+            <img src="./images/search.svg" alt="" /><input
+              type="text"
+              class="searchbox"
+            /><img src="./images/cross.svg" alt="" class="closeSearch" />
+          </li>
+        </ul>
+      </header>
+      <div class="library">
+        <div class="heading">
+          <img src="./images/playlist.svg" alt="" />
+          <h2>Library</h2>
+        </div>
+        <div class="songlist"></div>
+      </div>
     </aside>
     <main>
-        <nav>
-            <div class="buttons">
-                <img src="./images/hamburger.svg" alt="" class="hamburger">
-                <img src="./images/left.svg" alt="">
-                <img src="./images/right.svg" alt="">
-            </div>
-            <div class="login_buttons">
-                <button class="signup">Sign Up</button>
-                <button class="login">Login</button>
-            </div>
-        </nav>
-        <!-- right side main songs section goes in here  -->
-         <h1>Your Songs</h1>
-        <div id="songs-container" class="songs-grid">
-            <!-- <div class="song-card">
-                <img src="./songs/Replay/Replay.jpeg" class="cover-image">
-                <h3>Replay</h3>
-                <p>Artist: Me hoon</p>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi tempore modi culpa assumenda fugit
-                    libero dicta recusandae</p>
-                <button class="play-button">Play</button>
-            </div> -->
+      <nav>
+        <div class="buttons">
+          <img src="./images/hamburger.svg" alt="" class="hamburger" />
+          <img src="./images/left.svg" alt="" />
+          <img src="./images/right.svg" alt="" />
         </div>
-        <div class="seekbar_wrapper">
-            <div class="song_details">
-                <div class="song_details_text">
-                    <h4 class="seekBar_songName">Song Name</h4>
-                    <p class="seekBar_artistName">Artist Name</p>
-                </div>
-                <div class="control_buttons">
-                    <img src="./images/previous_song.svg" alt="previous" class="previous_control">
-                    <img src="./images/play_now.svg" alt="pause" class="pause_control">
-                    <img src="./images/next_song.svg" alt="next" class="next_control">
-                </div>
-                <div class="timeStamp">
-                    <span>00:00 / 3:20</span>
-                </div>
-            </div>
-            <div class="seekbar_container">
-                <div class="seekbar">
-                    <div class="seekbar_fill"></div>
-                </div>
-            </div>
+        <div class="login_buttons">
+          <button class="signup">Sign Up</button>
+          <button class="login">Login</button>
         </div>
+      </nav>
+      <h1>Your Songs</h1>
+      <div id="songs-container" class="songs-grid"></div>
+      <div class="seekbar_wrapper">
+        <div class="song_details">
+          <div class="song_details_text">
+            <h4 class="seekBar_songName">Song Name</h4>
+            <p class="seekBar_artistName">Artist Name</p>
+          </div>
+          <div class="control_buttons">
+            <img
+              src="./images/previous_song.svg"
+              alt="previous"
+              class="previous_control"
+            />
+            <img
+              src="./images/play_now.svg"
+              alt="pause"
+              class="pause_control"
+            />
+            <img src="./images/next_song.svg" alt="next" class="next_control" />
+          </div>
+          <div class="timeStamp">
+            <span>00:00 / 3:20</span>
+          </div>
+        </div>
+        <div class="seekbar_container">
+          <div class="seekbar">
+            <div class="seekbar_fill"></div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <script src="./script.js"></script>
-</body>
-
+  </body>
 </html>
