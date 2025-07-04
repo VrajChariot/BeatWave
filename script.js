@@ -238,30 +238,59 @@ function setupControls() {
   }
 }
 
-// Modify displaySongs function to show first song in seekbar
-async function displaySongs() {
+async function displaySongs(arr = []) {
   const container = document.getElementById("songs-container");
-  songsList = await fetchSongsList();
-  setupControls();
+  const songlist = document.querySelector(".songlist");
 
-  // Load first song details into seekbar
-  if (songsList.length > 0) {
-    initialSongInfo = await fetchSongInfo(songsList[0]);
-    if (initialSongInfo) {
-      const seekBarSongName = document.querySelector(".seekBar_songName");
-      const seekBarArtistName = document.querySelector(".seekBar_artistName");
-      seekBarSongName.textContent = initialSongInfo.title;
-      seekBarArtistName.textContent = initialSongInfo.artist;
+  // Initialize lists
+  let originalList = await fetchSongsList();
+  songsList = arr.length > 0 ? arr : originalList;
+
+  // Setup shuffle button
+  document.querySelector(".shuffle").addEventListener("click", async () => {
+    // Shuffle array
+    const shuffledList = [...songsList];
+    for (let i = shuffledList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledList[i], shuffledList[j]] = [shuffledList[j], shuffledList[i]];
     }
-  }
 
+    // Update global songsList
+    songsList = shuffledList;
+
+    // Clear containers
+    container.innerHTML = "";
+    songlist.innerHTML = "";
+
+    // Re-render songs
+    for (const songName of songsList) {
+      const songInfo = await fetchSongInfo(songName);
+      if (songInfo) {
+        // Create and append song elements
+        createSongElements(songInfo, songName, container, songlist);
+      }
+    }
+
+    console.log("Shuffled Songs:", songsList);
+  });
+
+  // Initial render
   for (const songName of songsList) {
     const songInfo = await fetchSongInfo(songName);
     if (songInfo) {
-      const songlistinfo = document.createElement("div");
-      songlistinfo.className = "song_info";
-      songlistinfo.innerHTML = `
-                    <div class="song_wrapper">
+      createSongElements(songInfo, songName, container, songlist);
+    }
+  }
+
+  setupControls();
+}
+
+function createSongElements(songInfo, songName, container, songlist) {
+  // Create list view element
+  const songlistinfo = document.createElement("div");
+  songlistinfo.className = "song_info";
+  songlistinfo.innerHTML = `
+ <div class="song_wrapper">
                         <img src="./images/music.svg" alt="">
                         <div>
                             <p>${songInfo.title}</p>
@@ -272,31 +301,30 @@ async function displaySongs() {
                         <p>Play Now</p>
                         <img src="./images/play_now.svg" alt="">
                     </div>
-            `;
-      songlistinfo.addEventListener("click", () => {
-        const index = songsList.indexOf(songName);
-        playSong(index);
-      });
-      document.querySelector(".songlist").appendChild(songlistinfo);
+  `;
+  songlist.appendChild(songlistinfo);
 
-      const songCard = document.createElement("div");
-      songCard.className = "song-card";
-      songCard.innerHTML = `
-                <img src="songs/${songInfo.folder}/${songInfo.image}" alt="${songInfo.title} cover" class="cover-image">
-                <h3>${songInfo.title}</h3>
-                <p class="Artist_info">Artist: ${songInfo.artist}</p>
-                <button class="play-button"><img src="./images/play_button.svg" alt="PlayNow"></button>
-            `;
-      const playButton = songCard.querySelector(".play-button");
-      playButton.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const index = songsList.indexOf(songName);
-        playSong(index);
-      });
+  // Create grid view element
+  const songCard = document.createElement("div");
+  songCard.className = "song-card";
+  songCard.innerHTML = `
+    <img src="songs/${songInfo.folder}/${songInfo.image}" alt="${songInfo.title} cover" class="cover-image">
+    <h3>${songInfo.title}</h3>
+    <p class="Artist_info">Artist: ${songInfo.artist}</p>
+    <button class="play-button"><img src="./images/play_button.svg" alt="PlayNow"></button>
+  `;
+  container.appendChild(songCard);
 
-      container.appendChild(songCard);
-    }
-  }
+  // Add click handlers
+  songlistinfo.addEventListener("click", () => {
+    const index = songsList.indexOf(songName);
+    playSong(index);
+  });
+
+  songCard.querySelector(".play-button").addEventListener("click", () => {
+    const index = songsList.indexOf(songName);
+    playSong(index);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", displaySongs);

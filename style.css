@@ -266,9 +266,11 @@
     color: #ffffff;
     position: relative;
   }
-
-  main > h1 {
+  .titleWrapper {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 20px 20px 0px 20px;
   }
 
@@ -305,7 +307,8 @@
     background: none;
   }
 
-  .login {
+  .login,
+  .shuffle {
     font-size: 16px;
     font-weight: bold;
     background-color: white;
